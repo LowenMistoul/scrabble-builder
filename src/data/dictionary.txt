@@ -1,0 +1,10 @@
+wizard
+draw
+ward
+wood
+door
+zoo
+quiz
+word
+row
+odor
