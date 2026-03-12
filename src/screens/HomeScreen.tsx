@@ -1,62 +1,109 @@
 import React, { useState } from "react";
-import { Button, FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { solveRackAndBoard } from "../engine/solver";
+import { validateInputs } from "../engine/validation";
 
 export default function HomeScreen() {
   const [rack, setRack] = useState("");
   const [boardWord, setBoardWord] = useState("");
-  const [results, setResults] = useState<{ word: string; score: number }[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [bestWord, setBestWord] = useState<string | null>(null);
+  const [score, setScore] = useState<number | null>(null);
+
   const handleSolve = () => {
-    const solved = solveRackAndBoard(rack.toUpperCase(), boardWord.toUpperCase());
-    setResults(solved);
+ 
+    const validation = validateInputs(rack.toUpperCase(), boardWord.toUpperCase());
+
+    if (!validation.valid) {
+      setError(validation.error || "Invalid input");
+      setBestWord(null);
+      setScore(null);
+      return;
+    }
+
+    const results = solveRackAndBoard(rack.toUpperCase(), boardWord.toUpperCase());
+
+    if (results.length === 0) {
+      setError("No valid words can be formed.");
+      setBestWord(null);
+      setScore(null);
+      return;
+    }
+
+    setError(null);
+    setBestWord(results[0].word);
+    setScore(results[0].score);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Scrabble Word Builder</Text>
-
+      <Text style={styles.title}>Scrabble Solver</Text>
 
       <TextInput
         style={styles.input}
-        placeholder="Enter your rack letters"
+        placeholder="Rack (max 7 letters)"
         value={rack}
         onChangeText={setRack}
-        maxLength={7}
-        autoCapitalize="characters"
       />
-
 
       <TextInput
         style={styles.input}
-        placeholder="Optional: board word"
+        placeholder="Board word (optional)"
         value={boardWord}
         onChangeText={setBoardWord}
-        autoCapitalize="characters"
       />
 
+      <Button title="Find Best Word" onPress={handleSolve} />
 
-      <Button title="Solve" onPress={handleSolve} />
+      {error && <Text style={styles.error}>{error}</Text>}
 
-
-      <FlatList
-        style={styles.results}
-        data={results}
-        keyExtractor={(item) => item.word}
-        renderItem={({ item }) => (
-          <Text style={styles.resultItem}>{item.word} — {item.score} pts</Text>
-        )}
-      />
-
-      {results.length === 0 && <Text style={styles.noResult}>No valid words found</Text>}
+      {bestWord && (
+        <View style={styles.resultBox}>
+          <Text style={styles.resultText}>Best Word: {bestWord}</Text>
+          <Text style={styles.resultText}>Score: {score}</Text>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, marginTop: 50 },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-  input: { borderWidth: 1, borderColor: "#ccc", padding: 10, marginBottom: 10 },
-  results: { marginTop: 20 },
-  resultItem: { fontSize: 18, marginVertical: 2 },
-  noResult: { marginTop: 20, fontStyle: "italic" },
+  container: {
+    padding: 20,
+    marginTop: 60
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 20,
+    textAlign: "center"
+  },
+
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 5
+  },
+
+  error: {
+    marginTop: 15,
+    color: "red",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+
+  resultBox: {
+    marginTop: 20,
+    padding: 15,
+    backgroundColor: "#e6ffe6",
+    borderRadius: 5
+  },
+
+  resultText: {
+    fontSize: 18,
+    textAlign: "center"
+  }
 });
