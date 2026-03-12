@@ -1,7 +1,7 @@
 export const dictionary: string[] = [
   "WOOD",
   "DO",
-  "OD",
+  "ODD",
   "WARD",
   "DRAW",
   "QUIZ",
@@ -12,4 +12,6 @@ export const dictionary: string[] = [
   "TRAIN",
   "TRAINS",
   "TRAINERS",
+  "RADIO",
+  "POPE",
 ];

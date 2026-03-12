@@ -46,6 +46,40 @@ function canBuildWord(
   return true;
 }
 
+function usesBoardLetter(word: string, boardWord: string): boolean {
+  if (!boardWord) return true;
+
+  for (const letter of boardWord) {
+    if (word.includes(letter)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function usesRackLetter(
+  word: string,
+  rackCounts: Record<string, number>,
+  boardCounts: Record<string, number>
+): boolean {
+
+  const wordCounts = countLetters(word);
+
+  for (const letter in wordCounts) {
+
+    const needed = wordCounts[letter];
+    const fromBoard = boardCounts[letter] || 0;
+
+    if (needed > fromBoard) {
+      return true;
+    }
+
+  }
+
+  return false;
+}
+
 export function solveRackAndBoard(
   rack: string,
   boardWord: string = ""
@@ -61,12 +95,16 @@ export function solveRackAndBoard(
 
   for (const word of dictionary) {
 
-    if (boardWord && !word.includes(boardWord)) {
-      continue;
+    if (!usesBoardLetter(word, boardWord)) {
+        continue;
     }
 
     if (!canBuildWord(word, rackCounts, boardCounts)) {
       continue;
+    }
+
+    if (!usesRackLetter(word, rackCounts, boardCounts)) {
+        continue;
     }
 
     const score = calculateWordScore(word);
