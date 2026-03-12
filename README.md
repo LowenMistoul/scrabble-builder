@@ -39,4 +39,17 @@ It finds the **highest scoring valid words** that can be formed using a player's
 ```bash
 npm install
 # or
-yarn
+yarn install
+```
+
+### Run in web
+```bash
+npm start
+# or
+yarn start
+```
+
+### Testing
+```bash
+npm test
+```
