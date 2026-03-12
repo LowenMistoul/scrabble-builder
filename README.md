@@ -1,50 +1,42 @@
-# Welcome to your Expo app 👋
+# Scrabble Word Builder
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A **Scrabble word solver** built with **React Native** that runs both in the browser and on mobile.  
+It finds the **highest scoring valid words** that can be formed using a player's rack and optionally building on a word already on the board.
 
-## Get started
+---
 
-1. Install dependencies
+## Features
 
-   ```bash
-   npm install
-   ```
+- Input a **rack** (1–7 letters) and optionally a **board word**.
+- Returns **highest scoring valid words**, limited to **top 10 results**.
+- Validates inputs and ensures **tile distribution rules** are respected (rack + board letters cannot exceed available tiles).
+- Shows **loading spinner** during computation (async simulation).
+- Clear button to reset inputs and results.
+- Fully tested with **unit tests** covering dictionary loading, letter counting, validation, scoring, and solver logic.
 
-2. Start the app
+---
 
-   ```bash
-   npx expo start
-   ```
+## Demo
 
-In the output, you'll find options to open the app in a
+| Input | Rack | Board Word | Top Result |
+|-------|------|------------|------------|
+| Example 1 | `AIDOORW` | `WIZ` | `WIZARD` |
+| Example 2 | `AIDOORW` | (none) | `DRAW` |
+| Example 3 | `AIDOORZ` | `QUIZ` | Invalid input (too many Z tiles) |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Getting Started
 
-## Get a fresh project
+### Prerequisites
 
-When you're ready, run:
+- Node.js >= 18
+- npm or yarn
+- Expo CLI (`npm install -g expo-cli`) if running on mobile
+
+### Install Dependencies
 
 ```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+npm install
+# or
+yarn
