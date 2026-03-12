@@ -49,6 +49,14 @@ npm start
 yarn start
 ```
 
+Expo will open a browser window with a QR code for mobile preview or a web preview.
+
+### Run on Mobile
+	1.	Install Expo Go on your Android/iOS device.
+	2.	Scan the QR code displayed after npm start.
+	3.	The app will load with your inputs and solver ready.
+
+
 ### Testing
 ```bash
 npm test
