@@ -6,5 +6,10 @@ export const dictionary: string[] = [
   "DRAW",
   "QUIZ",
   "WIZARD",
-  "DOOR"
+  "DOOR",
+  "ODOR",
+  "POOR",
+  "TRAIN",
+  "TRAINS",
+  "TRAINERS",
 ];
