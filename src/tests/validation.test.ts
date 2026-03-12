@@ -1,33 +1,23 @@
-import { validateRack } from "../engine/validation";
+import { validateInputs } from "../engine/validation";
 
-describe("Rack Validation", () => {
-
-  test("accepts valid uppercase rack", () => {
-    expect(validateRack("WOOD")).toBe(true);
+describe("Input Validation", () => {
+  test("rejects empty rack", () => {
+    expect(validateInputs("").valid).toBe(false);
   });
 
-  test("rejects lowercase letters", () => {
-    expect(validateRack("wood")).toBe(false);
+  test("rejects rack >7 letters", () => {
+    expect(validateInputs("ABCDEFGH").valid).toBe(false);
   });
 
-  test("rejects numbers", () => {
-    expect(validateRack("ABC1")).toBe(false);
+  test("rejects invalid characters", () => {
+    expect(validateInputs("AB1CD").valid).toBe(false);
   });
 
-  test("rejects special characters", () => {
-    expect(validateRack("AB@D")).toBe(false);
+  test("rejects too many tiles combined with board word", () => {
+    expect(validateInputs("AIDOORZ", "QUIZ").valid).toBe(false);
   });
 
-  test("rejects blank tiles", () => {
-    expect(validateRack("WOOD?")).toBe(false);
+  test("accepts valid rack and board word", () => {
+    expect(validateInputs("AIDOORW", "WIZ").valid).toBe(true);
   });
-
-  test("rejects rack longer than 7 letters", () => {
-    expect(validateRack("ABCDEFGH")).toBe(false);
-  });
-
-  test("accepts rack of exactly 7 letters", () => {
-    expect(validateRack("ABCDEFG")).toBe(true);
-  });
-
 });
