@@ -1,4 +1,4 @@
-import letterData from "../data/letter_data.json";
+import { letterData } from "../data/letter_data";
 import { loadDictionary } from "./dictionaryLoader";
 import { countLetters } from "./letterCounter";
 import { calculateWordScore } from "./scoring";

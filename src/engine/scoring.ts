@@ -1,4 +1,4 @@
-import letterData from "../data/letter_data.json";
+import { letterData } from "../data/letter_data";
 
 export function calculateWordScore(word: string): number {
   let totalScore = 0;
