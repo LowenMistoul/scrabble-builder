@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { solveRackAndBoard } from "../engine/solver";
 import { validateInputs } from "../engine/validation";
 
@@ -9,52 +9,80 @@ export default function HomeScreen() {
   const [error, setError] = useState<string | null>(null);
   const [bestWord, setBestWord] = useState<string | null>(null);
   const [score, setScore] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleSolve = () => {
- 
-    const validation = validateInputs(rack.toUpperCase(), boardWord.toUpperCase());
+    const handleSolve = () => {
+    
+        const validation = validateInputs(rack.toUpperCase(), boardWord.toUpperCase());
 
-    if (!validation.valid) {
-      setError(validation.error || "Invalid input");
-      setBestWord(null);
-      setScore(null);
-      return;
-    }
+        if (!validation.valid) {
+        setError(validation.error || "Invalid input");
+        setBestWord(null);
+        setScore(null);
+        return;
+        }
 
-    const results = solveRackAndBoard(rack.toUpperCase(), boardWord.toUpperCase());
+        setError(null);
+        setLoading(true);
 
-    if (results.length === 0) {
-      setError("No valid words can be formed.");
-      setBestWord(null);
-      setScore(null);
-      return;
-    }
+        setTimeout(() => {
+            const results = solveRackAndBoard(rack.toUpperCase(), boardWord.toUpperCase());
 
-    setError(null);
-    setBestWord(results[0].word);
-    setScore(results[0].score);
-  };
+            if (results.length === 0) {
+                setError("No valid words can be formed.");
+                setBestWord(null);
+                setScore(null);
+            }else {
+                setBestWord(results[0].word);
+                setScore(results[0].score);
+            }
+
+            setLoading(false);
+        }, 200); 
+    };
+
+    const handleClear = () => {
+        setRack("");
+        setBoardWord("");
+        setBestWord(null);
+        setScore(null);
+        setError(null);
+    };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Scrabble Solver</Text>
+        <Text style={styles.title}>Scrabble Solver</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Rack (max 7 letters)"
-        value={rack}
-        onChangeText={setRack}
-      />
+        <TextInput
+            style={styles.input}
+            placeholder="Rack (max 7 letters)"
+            value={rack}
+            onChangeText={setRack}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Board word (optional)"
-        value={boardWord}
-        onChangeText={setBoardWord}
-      />
+        <TextInput
+            style={styles.input}
+            placeholder="Board word (optional)"
+            value={boardWord}
+            onChangeText={setBoardWord}
+        />
 
-      <Button title="Find Best Word" onPress={handleSolve} />
+        <View style={styles.buttonRow}>
 
+            <Button
+            title="Solve"
+            onPress={handleSolve}
+            />
+
+            <Button
+            title="Clear"
+            onPress={handleClear}
+            color="gray"
+            />
+
+        </View>
+
+      {loading && <ActivityIndicator size="large" style={{ marginTop: 20 }} />}
       {error && <Text style={styles.error}>{error}</Text>}
 
       {bestWord && (
@@ -86,6 +114,12 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     borderRadius: 5
+  },
+
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20
   },
 
   error: {
