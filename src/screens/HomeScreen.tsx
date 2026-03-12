@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View, useColorScheme } from "react-native";
 import { solveRackAndBoard } from "../engine/solver";
 import { validateInputs } from "../engine/validation";
 
 export default function HomeScreen() {
+
+  const colorScheme = useColorScheme();
   const [rack, setRack] = useState("");
   const [boardWord, setBoardWord] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -49,48 +51,48 @@ export default function HomeScreen() {
         setError(null);
     };
 
+    const colors = {
+        background: colorScheme === "dark" ? "#121212" : "#fff",
+        text: colorScheme === "dark" ? "#fff" : "#000",
+        inputBackground: colorScheme === "dark" ? "#1e1e1e" : "#f9f9f9",
+        border: colorScheme === "dark" ? "#333" : "#ccc",
+        error: "red"
+    };
+
   return (
-    <View style={styles.container}>
-        <Text style={styles.title}>Scrabble Solver</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <Text style={[styles.title, { color: colors.text }]}>Scrabble Solver</Text>
 
         <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.border }]}
             placeholder="Rack (max 7 letters)"
+            placeholderTextColor={colorScheme === "dark" ? "#888" : "#aaa"}
             value={rack}
             onChangeText={setRack}
         />
 
         <TextInput
-            style={styles.input}
+            style={[styles.input, { backgroundColor: colors.inputBackground, color: colors.text, borderColor: colors.border }]}
             placeholder="Board word (optional)"
+            placeholderTextColor={colorScheme === "dark" ? "#888" : "#aaa"}
             value={boardWord}
             onChangeText={setBoardWord}
         />
 
         <View style={styles.buttonRow}>
-
-            <Button
-            title="Solve"
-            onPress={handleSolve}
-            />
-
-            <Button
-            title="Clear"
-            onPress={handleClear}
-            color="gray"
-            />
-
+            <Button title="Solve" onPress={handleSolve} />
+            <Button title="Clear" onPress={handleClear} color="gray" />
         </View>
 
-      {loading && <ActivityIndicator size="large" style={{ marginTop: 20 }} />}
-      {error && <Text style={styles.error}>{error}</Text>}
+        {loading && <ActivityIndicator size="large" style={{ marginTop: 20 }} />}
+        {error && <Text style={styles.error}>{error}</Text>}
 
-      {bestWord && (
-        <View style={styles.resultBox}>
-          <Text style={styles.resultText}>Best Word: {bestWord}</Text>
-          <Text style={styles.resultText}>Score: {score}</Text>
-        </View>
-      )}
+        {bestWord && (
+            <View style={styles.resultBox}>
+            <Text style={styles.resultText}>Best Word: {bestWord}</Text>
+            <Text style={styles.resultText}>Score: {score}</Text>
+            </View>
+        )}
     </View>
   );
 }
